@@ -63,7 +63,7 @@ export interface TimeStats {
 export interface InlineEditMetadata {
   itemId: string;
   field: keyof PlannerItem;
-  originalValue: any;
+  originalValue: unknown;
 }
 
 export const PLANNER_CONSTANTS = {
