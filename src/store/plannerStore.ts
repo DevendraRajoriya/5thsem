@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { startOfDay, subDays, parseISO, isAfter, isBefore } from 'date-fns';
+import { startOfDay, subDays, parseISO, isBefore } from 'date-fns';
 import {
   PlannerItem,
   TimeLog,
