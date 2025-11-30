@@ -1,5 +1,5 @@
 import React from 'react';
-import ExampleComponents from './ExampleComponents';
+import Dashboard from './Dashboard';
 
 const ShellLayout: React.FC = () => {
   return (
@@ -23,18 +23,8 @@ const ShellLayout: React.FC = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome to Your App
-          </h2>
-          <p className="text-gray-600">
-            Your React + TypeScript + Vite + Tailwind CSS scaffold is ready for
-            development.
-          </p>
-        </div>
-
-        <ExampleComponents />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-4rem)]">
+        <Dashboard />
       </main>
     </div>
   );

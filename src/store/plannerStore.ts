@@ -28,9 +28,9 @@ interface PlannerState {
   updateSchedule: (id: string, scheduledDate?: string, dueDate?: string) => void;
   reorderItems: (category: PlannerCategory, itemIds: string[]) => void;
 
-  startEdit: (itemId: string, field: keyof PlannerItem, originalValue: any) => void;
+  startEdit: (itemId: string, field: keyof PlannerItem, originalValue: unknown) => void;
   cancelEdit: () => void;
-  commitEdit: (itemId: string, field: keyof PlannerItem, value: any) => void;
+  commitEdit: (itemId: string, field: keyof PlannerItem, value: unknown) => void;
 
   startTimeLog: (plannerId: string, notes?: string) => TimeLog;
   endTimeLog: (logId: string) => void;
