@@ -73,6 +73,95 @@ npm run dev
 - Keep local state in components when appropriate
 - Use custom hooks for complex state logic
 
+#### Planner Store
+
+The application includes a comprehensive planner store (`src/store/plannerStore.ts`) for managing tasks and time tracking:
+
+**Basic Usage:**
+
+```typescript
+import { usePlannerStore } from './store/plannerStore';
+
+function MyComponent() {
+  const { items, createItem, toggleStatus } = usePlannerStore();
+
+  // Create a new task
+  const handleCreateTask = () => {
+    createItem({
+      title: 'Complete project documentation',
+      description: 'Write comprehensive docs',
+      status: 'pending',
+      priority: 'high',
+      category: 'today',
+      tags: ['documentation'],
+    });
+  };
+
+  // Toggle task status
+  const handleToggleStatus = (id: string) => {
+    toggleStatus(id, 'completed');
+  };
+
+  return <div>/* Your UI */</div>;
+}
+```
+
+**Features:**
+
+- **CRUD Operations**: `createItem`, `updateItem`, `deleteItem`, `getItem`
+- **Category Management**: Group items by `today`, `upcoming`, or `habits`
+- **Status Toggles**: Track progress through `pending`, `in-progress`, `completed`, `archived`
+- **Scheduling**: Set `scheduledDate` and `dueDate` with `updateSchedule`
+- **Reordering**: Drag-and-drop support via `reorderItems`
+- **Inline Editing**: Track edit state with `startEdit`, `commitEdit`, `cancelEdit`
+
+**Time Logging:**
+
+```typescript
+const { startTimeLog, endTimeLog, getActiveTimeLog, getTimeStats } = usePlannerStore();
+
+// Start tracking time
+const log = startTimeLog(itemId, 'Working on task');
+
+// End time log (calculates duration automatically)
+endTimeLog(log.id);
+
+// Check if item has active timer
+const activeLog = getActiveTimeLog(itemId);
+
+// Get analytics
+const stats = getTimeStats();
+console.log('Time today:', stats.today / 3600, 'hours');
+console.log('Last 7 days:', stats.last7Days / 3600, 'hours');
+console.log('Average per day:', stats.averagePerDay7 / 3600, 'hours');
+```
+
+**Analytics & Aggregates:**
+
+```typescript
+// Get day-by-day breakdown
+const aggregates = getDayAggregates(30); // Last 30 days
+aggregates.forEach(day => {
+  console.log(`${day.date}: ${day.totalDuration}s across ${day.itemCount} items`);
+});
+
+// Get stats for specific item
+const itemStats = getTimeStats(itemId);
+console.log('Time on this item:', itemStats.byItem[itemId]);
+```
+
+**Persistence:**
+
+All data is automatically persisted to localStorage using Zustand's persist middleware. Data syncs across browser tabs and survives page refreshes.
+
+**Type Safety:**
+
+All types are defined in `src/store/types.ts`:
+- `PlannerItem`: Task/habit/event with status, priority, dates, tags, recurrence
+- `TimeLog`: Time tracking entry with start/end times and duration
+- `TimeStats`: Computed analytics for various time windows
+- `DayAggregate`: Day-by-day time tracking summary
+
 ### Styling
 
 - Use Tailwind CSS classes for styling
