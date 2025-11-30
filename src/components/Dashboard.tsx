@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Plus, Calendar, Target, Zap } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Calendar, Target, Zap, BarChart3 } from 'lucide-react';
 import { PlannerItem, PlannerCategory } from '../store/types';
 import { usePlannerStore } from '../store/plannerStore';
 import TaskCard from './TaskCard';
 import FocusMode from './FocusMode';
+import AnalyticsModal from './AnalyticsModal';
 import { cn } from '../utils/cn';
+import { BUTTON_STYLES, SHADOW_TOKENS } from '../utils/tailwindUtils';
 import { format, addDays } from 'date-fns';
 
 interface DashboardProps {
@@ -103,6 +105,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ category, onClose }) => {
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
   const [expandedItem, setExpandedItem] = useState<PlannerItem | null>(null);
   const [showNewItemForm, setShowNewItemForm] = useState<PlannerCategory | null>(null);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const { getItemsByCategory } = usePlannerStore();
 
   const todayItems = getItemsByCategory('today');
@@ -231,20 +234,39 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
   }
 
   return (
-    <div className={cn('h-full', className)}>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">
-          Manage your tasks, habits, and upcoming events in one place
-        </p>
+    <>
+      <div className={cn('h-full', className)}>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+            <p className="text-gray-600">
+              Manage your tasks, habits, and upcoming events in one place
+            </p>
+          </div>
+          <button
+            onClick={() => setShowAnalytics(true)}
+            className={cn(
+              'flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200',
+              BUTTON_STYLES.primary,
+              SHADOW_TOKENS.soft,
+              'hover:shadow-md'
+            )}
+            aria-label="View analytics"
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span>Analytics</span>
+          </button>
+        </div>
+
+        <div className="flex space-x-6 h-full overflow-hidden">
+          {renderColumn('today', todayItems)}
+          {renderColumn('upcoming', upcomingItems)}
+          {renderColumn('habits', habitItems)}
+        </div>
       </div>
 
-      <div className="flex space-x-6 h-full overflow-hidden">
-        {renderColumn('today', todayItems)}
-        {renderColumn('upcoming', upcomingItems)}
-        {renderColumn('habits', habitItems)}
-      </div>
-    </div>
+      <AnalyticsModal isOpen={showAnalytics} onClose={() => setShowAnalytics(false)} />
+    </>
   );
 };
 

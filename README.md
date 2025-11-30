@@ -213,11 +213,55 @@ function CustomTimer() {
 }
 ```
 
+#### Analytics & Focus Tracking
+
+The application includes a comprehensive analytics system for tracking focus time:
+
+**Basic Usage:**
+
+```typescript
+import { usePlannerStore } from './store/plannerStore';
+
+function MyComponent() {
+  const { getTimeStats, getDayAggregates } = usePlannerStore();
+
+  // Get overall statistics
+  const stats = getTimeStats();
+  console.log('Total today:', stats.today / 3600, 'hours');
+  console.log('Last 7 days:', stats.last7Days / 3600, 'hours');
+  console.log('Last 30 days:', stats.last30Days / 3600, 'hours');
+  console.log('Daily average (7d):', stats.averagePerDay7 / 3600, 'hours');
+
+  // Get day-by-day breakdown
+  const dailyData = getDayAggregates(30); // Last 30 days
+  dailyData.forEach(day => {
+    console.log(`${day.date}: ${day.totalDuration / 3600}h across ${day.itemCount} items`);
+  });
+
+  return <div>/* Your UI */</div>;
+}
+```
+
+**Components:**
+
+- **AnalyticsChart**: Interactive chart with 7/30-day range selector and focus time trends
+- **AnalyticsModal**: Modal wrapper with smooth animations for analytics display
+
+**Features:**
+
+- 7-day and 30-day range selection
+- Combined bar/line chart visualization
+- Total focus time and daily averages
+- Custom tooltips with human-readable times
+- Smooth modal animations and transitions
+- Accessibility features (keyboard navigation, ARIA labels)
+
 **Documentation:**
 
 For comprehensive documentation, see:
-- `docs/TIMER.md` - Complete API reference and usage guide
-- `src/components/TimerWidget.examples.tsx` - Live examples and demos
+- `docs/TIMER.md` - Timer widget API reference and usage guide
+- `docs/ANALYTICS.md` - Complete analytics system documentation
+- `src/components/TimerWidget.examples.tsx` - Live timer examples and demos
 
 ### Styling
 
@@ -225,6 +269,48 @@ For comprehensive documentation, see:
 - Custom components are defined in `src/styles/globals.css`
 - Follow the Notion-inspired theme (Inter font, light gray palette)
 - Utilize smooth transitions and animations
+
+#### Reusable Tailwind Utilities
+
+The application includes reusable Tailwind utility classes in `src/utils/tailwindUtils.ts`:
+
+```typescript
+import { CARD_STYLES, BUTTON_STYLES, MODAL_STYLES, SHADOW_TOKENS, SPACING_TOKENS } from './utils/tailwindUtils';
+
+// Card with soft shadow and subtle border
+<div className={cn(CARD_STYLES.base, SHADOW_TOKENS.soft)} />
+
+// Primary button with smooth transitions
+<button className={BUTTON_STYLES.primary} />
+
+// Modal with professional styling
+<div className={MODAL_STYLES.backdrop} />
+<div className={MODAL_STYLES.content} />
+<div className={MODAL_STYLES.header} />
+<div className={MODAL_STYLES.body} />
+
+// Consistent spacing
+<div className={SPACING_TOKENS.md}>
+  {/* Items with consistent 1.5rem gaps */}
+</div>
+
+// Soft shadows for depth
+<div className={SHADOW_TOKENS.subtle} />   {/* Subtle shadow */}
+<div className={SHADOW_TOKENS.elevated} />  {/* Elevated shadow */}
+<div className={SHADOW_TOKENS.modal} />     {/* Modal shadow */}
+```
+
+**Available Utilities:**
+
+- `CARD_STYLES`: Base, hover, and interactive card styles
+- `BUTTON_STYLES`: Primary, secondary, tertiary, and ghost button styles
+- `INPUT_STYLES`: Form input styling (base, error, disabled)
+- `MODAL_STYLES`: Modal container, header, body, and backdrop
+- `BADGE_STYLES`: Status badges (primary, success, warning, error, neutral)
+- `SPACING_TOKENS`: Consistent spacing presets (xs, sm, base, md, lg)
+- `SHADOW_TOKENS`: Soft, subtle, medium, elevated, modal shadows
+- `BORDER_TOKENS`: Subtle, soft, medium, strong border styles
+- `TEXT_STYLES`: Typography presets (headings, body, labels)
 
 ### Code Quality
 
