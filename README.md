@@ -162,6 +162,63 @@ All types are defined in `src/store/types.ts`:
 - `TimeStats`: Computed analytics for various time windows
 - `DayAggregate`: Day-by-day time tracking summary
 
+#### Timer Hook & Widget
+
+The application includes a powerful timer system for tracking time on tasks:
+
+**Basic Usage:**
+
+```typescript
+import { TimerWidget } from './components/TimerWidget';
+
+// Standalone timer
+<TimerWidget />
+
+// Integrated with planner item
+<TimerWidget plannerId={task.id} />
+
+// Compact mode for inline use
+<TimerWidget compact plannerId={task.id} />
+```
+
+**Features:**
+
+- **Stopwatch Mode**: Count up from zero with precise tracking
+- **Countdown Mode**: Set target duration (e.g., 25-minute Pomodoro)
+- **Store Integration**: Automatically creates time logs when connected to planner items
+- **Notes Support**: Add notes to time log entries
+- **Progress Tracking**: Visual progress bar for countdown timers
+- **Accessibility**: Full ARIA labels and keyboard navigation
+
+**Using the Hook Directly:**
+
+```typescript
+import { useTimer } from './hooks/useTimer';
+
+function CustomTimer() {
+  const timer = useTimer({
+    mode: 'countdown',
+    targetDuration: 25 * 60, // 25 minutes in seconds
+    onComplete: () => alert('Time is up!'),
+  });
+
+  return (
+    <div>
+      <div>{timer.getFormattedElapsed().formatted}</div>
+      <button onClick={timer.start}>Start</button>
+      <button onClick={timer.pause}>Pause</button>
+      <button onClick={timer.reset}>Reset</button>
+    </div>
+  );
+}
+```
+
+**Documentation:**
+
+For comprehensive documentation, see:
+- `docs/TIMER.md` - Complete API reference and usage guide
+- `src/components/TimerWidget.examples.tsx` - Live examples and demos
+
 ### Styling
 
 - Use Tailwind CSS classes for styling
